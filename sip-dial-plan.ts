@@ -8,12 +8,9 @@ const HOSTNAME = "0.0.0.0";
 const PORT = 9000;
 
 // ----------------------------------------------------------------------------
-function ok(body: string): Response {
-  return new Response(body, {
-    status: Status.OK,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
+function methodNotAllowed(): Response {
+  return new Response("Method Not Allowed", {
+    status: Status.MethodNotAllowed,
   });
 }
 
@@ -25,7 +22,27 @@ function notFound(): Response {
 }
 
 // ----------------------------------------------------------------------------
-function getDialPlan(req: Request) {
+function unauthorized(): Response {
+  return new Response("Unauthorized", {
+    status: Status.Unauthorized,
+  });
+}
+
+// ----------------------------------------------------------------------------
+function ok(body: string): Response {
+  return new Response(body, {
+    status: Status.OK,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
+}
+
+// ----------------------------------------------------------------------------
+function getDialPlan(qs: URLSearchParams) {
+  const token = qs.get("token");
+  if (!token) return unauthorized();
+
   return ok("ok");
 }
 
@@ -33,10 +50,12 @@ function getDialPlan(req: Request) {
 async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
   const path = url.pathname;
+  const qs = new URLSearchParams(url.search);
 
-  if ((req.method === "GET") && (path === "/get-dial-plan")) {
-    return await getDialPlan(req);
-  } else return notFound();
+  if (req.method !== "GET" && req.method !== "HEAD") return methodNotAllowed();
+  if (path !== "/get-dial-plan") return notFound();
+
+  return await getDialPlan(qs);
 }
 
 // ----------------------------------------------------------------------------
