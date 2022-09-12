@@ -1,6 +1,7 @@
 // ----------------------------------------------------------------------------
 // sip-dial-plan.ts
 // ----------------------------------------------------------------------------
+import { TOKEN_ALGORITHM, TOKEN_SECRET } from "./config.ts";
 import { serve } from "https://deno.land/std/http/server.ts";
 import { Status } from "https://deno.land/std/http/http_status.ts";
 
@@ -39,7 +40,30 @@ function ok(body: string): Response {
 }
 
 // ----------------------------------------------------------------------------
-function getDialPlan(qs: URLSearchParams) {
+async function getCryptoKey(secret: string, hash: string): Promise<CryptoKey> {
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(secret);
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw",
+    keyData,
+    {
+      name: "HMAC",
+      hash: hash,
+    },
+    true,
+    ["sign", "verify"],
+  );
+
+  return cryptoKey;
+}
+
+// ----------------------------------------------------------------------------
+async function getDialPlan(qs: URLSearchParams) {
+  let hash = "SHA-256";
+
+  if (TOKEN_ALGORITHM === "HS512") hash = "SHA-512";
+
+  const cryptoKey = await getCryptoKey(TOKEN_SECRET, hash);
   const token = qs.get("token");
   if (!token) return unauthorized();
 
