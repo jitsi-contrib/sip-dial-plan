@@ -70,7 +70,17 @@ async function verifyToken(token: string): Promise<Payload> {
 }
 
 // ----------------------------------------------------------------------------
-async function getDialPlan(qs: URLSearchParams) {
+async function getOwnerDialPlan(): Promise<Response> {
+  return await ok("ok");
+}
+
+// ----------------------------------------------------------------------------
+async function getMemberDialPlan(): Promise<Response> {
+  return await ok("ok");
+}
+
+// ----------------------------------------------------------------------------
+async function getDialPlan(qs: URLSearchParams): Promise<Response> {
   const token = qs.get("token");
   if (!token) return unauthorized();
 
@@ -78,11 +88,17 @@ async function getDialPlan(qs: URLSearchParams) {
 
   try {
     jwt = await verifyToken(token);
-  } catch (e) {
+  } catch {
     return unauthorized();
   }
 
-  return ok("ok");
+  try {
+    if (jwt.context.user.affiliation === "owner") return getOwnerDialPlan();
+  } catch {
+    // no affiliation field in token
+  }
+
+  return getMemberDialPlan();
 }
 
 // ----------------------------------------------------------------------------
