@@ -3,4 +3,4 @@ set -e
 
 BASEDIR=$(dirname $0)
 
-deno run --allow-net --allow-run $BASEDIR/sip-dial-plan.ts
+deno run --allow-net --allow-read $BASEDIR/sip-dial-plan.ts
