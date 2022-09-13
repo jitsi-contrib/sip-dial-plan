@@ -4,7 +4,7 @@ This is a simple service which publishes SIP dialing plans for
 `video SIP gateway`. It checks the token and sends the dialing plan as a
 response if the token is valid.
 
-The dialing plans are in `JSON` files":
+The dialing plans are in `JSON` files:
 
 - [dial-plan-owner.json](./dial-plan-owner.json)\
   contains the dialing plan for `moderator` users.
