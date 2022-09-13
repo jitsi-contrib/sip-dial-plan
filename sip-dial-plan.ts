@@ -25,9 +25,12 @@ function notFound(): Response {
 }
 
 // ----------------------------------------------------------------------------
-function unauthorized(): Response {
-  return new Response("Unauthorized", {
-    status: Status.Unauthorized,
+function emptyList(): Response {
+  return new Response("[]", {
+    status: Status.OK,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
   });
 }
 
@@ -76,7 +79,7 @@ async function getOwnerDialPlan(): Promise<Response> {
     const json = await Deno.readTextFile(OWNER_DIAL_PLAN);
     return ok(json);
   } catch {
-    return NotFound();
+    return emptyList();
   }
 }
 
@@ -86,21 +89,21 @@ async function getMemberDialPlan(): Promise<Response> {
     const json = await Deno.readTextFile(MEMBER_DIAL_PLAN);
     return ok(json);
   } catch {
-    return NotFound();
+    return emptyList();
   }
 }
 
 // ----------------------------------------------------------------------------
 async function getDialPlan(qs: URLSearchParams): Promise<Response> {
   const token = qs.get("jwt");
-  if (!token) return unauthorized();
+  if (!token) return emptyList();
 
   let jwt: Payload;
 
   try {
     jwt = await verifyToken(token);
   } catch {
-    return unauthorized();
+    return emptyList();
   }
 
   try {
