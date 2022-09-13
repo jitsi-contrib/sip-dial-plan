@@ -92,7 +92,7 @@ async function getMemberDialPlan(): Promise<Response> {
 
 // ----------------------------------------------------------------------------
 async function getDialPlan(qs: URLSearchParams): Promise<Response> {
-  const token = qs.get("token");
+  const token = qs.get("jwt");
   if (!token) return unauthorized();
 
   let jwt: Payload;
