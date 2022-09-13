@@ -67,8 +67,9 @@ async function verifyToken(token: string): Promise<Payload> {
   if (TOKEN_ALGORITHM === "HS512") hash = "SHA-512";
 
   const cryptoKey = await getCryptoKey(TOKEN_SECRET, hash);
+  const jwt = await verify(token, cryptoKey);
 
-  return verify(token, cryptoKey);
+  return jwt;
 }
 
 // ----------------------------------------------------------------------------
@@ -110,7 +111,7 @@ async function getDialPlan(qs: URLSearchParams): Promise<Response> {
     // no affiliation field in token
   }
 
-  return getMemberDialPlan();
+  return await getMemberDialPlan();
 }
 
 // ----------------------------------------------------------------------------
