@@ -9,6 +9,8 @@ import { type Payload } from "https://deno.land/x/djwt/mod.ts";
 
 const HOSTNAME = "0.0.0.0";
 const PORT = 9000;
+const OWNER_DIAL_PLAN = "./dial-plan-owner.json";
+const MEMBER_DIAL_PLAN = "./dial-plan-member.json";
 
 // ----------------------------------------------------------------------------
 function methodNotAllowed(): Response {
@@ -71,12 +73,22 @@ async function verifyToken(token: string): Promise<Payload> {
 
 // ----------------------------------------------------------------------------
 async function getOwnerDialPlan(): Promise<Response> {
-  return await ok("ok");
+  try {
+    const json = await Deno.readTextFile(OWNER_DIAL_PLAN);
+    return ok(json);
+  } catch {
+    return NotFound();
+  }
 }
 
 // ----------------------------------------------------------------------------
 async function getMemberDialPlan(): Promise<Response> {
-  return await ok("ok");
+  try {
+    const json = await Deno.readTextFile(MEMBER_DIAL_PLAN);
+    return ok(json);
+  } catch {
+    return NotFound();
+  }
 }
 
 // ----------------------------------------------------------------------------
