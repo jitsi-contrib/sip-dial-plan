@@ -5,6 +5,7 @@ import { TOKEN_ALGORITHM, TOKEN_SECRET } from "./config.ts";
 import { serve } from "https://deno.land/std/http/server.ts";
 import { Status } from "https://deno.land/std/http/http_status.ts";
 import { verify } from "https://deno.land/x/djwt/mod.ts";
+import { type Payload } from "https://deno.land/x/djwt/mod.ts";
 
 const HOSTNAME = "0.0.0.0";
 const PORT = 9000;
@@ -59,7 +60,7 @@ async function getCryptoKey(secret: string, hash: string): Promise<CryptoKey> {
 }
 
 // ----------------------------------------------------------------------------
-async function verifyToken(token: string) {
+async function verifyToken(token: string): Promise<Payload> {
   let hash = "SHA-256";
   if (TOKEN_ALGORITHM === "HS512") hash = "SHA-512";
 
@@ -73,10 +74,11 @@ async function getDialPlan(qs: URLSearchParams) {
   const token = qs.get("token");
   if (!token) return unauthorized();
 
+  let jwt: Payload;
+
   try {
-    const jwt = await verifyToken(token);
-    console.log(jwt);
-  } catch {
+    jwt = await verifyToken(token);
+  } catch (e) {
     return unauthorized();
   }
 
