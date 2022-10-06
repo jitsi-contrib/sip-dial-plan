@@ -4,13 +4,7 @@ This is a simple service which publishes SIP dialing plans for
 `video SIP gateway`. It checks the token and sends the dialing plan as a
 response if the token is valid.
 
-The dialing plans are in `JSON` files:
-
-- [dial-plan-owner.json](./dial-plan-owner.json)\
-  contains the dialing plan for `moderator` users.
-
-- [dial-plan-member.json](./dial-plan-member.json)\
-  contains the dialing plan for `normal` users.
+The dialing plan is in [dial-plan.json](./dial-plan.json)\
 
 #### installation
 
@@ -43,8 +37,7 @@ git clone https://github.com/jitsi-contrib/sip-dial-plan.git
 Update the following files according your environment:
 
 - [config.ts](./config.ts)
-- [dial-plan-owner.json](./dial-plan-owner.json)
-- [dial-plan-member.json](./dial-plan-member.json)
+- [dial-plan.json](./dial-plan.json)
 
 #### running
 
