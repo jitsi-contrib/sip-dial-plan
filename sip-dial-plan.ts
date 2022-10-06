@@ -73,7 +73,7 @@ async function verifyToken(token: string): Promise<Payload> {
 }
 
 // ----------------------------------------------------------------------------
-async function getDialPlan(): Promise<Response> {
+async function readDialPlan(): Promise<Response> {
   try {
     const json = await Deno.readTextFile(DIAL_PLAN);
     return ok(json);
@@ -96,9 +96,20 @@ async function getDialPlan(qs: URLSearchParams): Promise<Response> {
   }
 
   try {
-    if (jwt.context.user.affiliation === "owner") return getDialPlan();
+    if (jwt.context.user.affiliation === "owner") return readDialPlan();
   } catch {
     // no affiliation field in token
+  }
+
+  try {
+    if (
+      jwt.context.user.moderator === "true" ||
+      jwt.context.user.moderator === true
+    ) {
+      return readDialPlan();
+    }
+  } catch {
+    // no moderator field in token
   }
 
   return emptyList();
