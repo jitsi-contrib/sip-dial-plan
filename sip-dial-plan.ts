@@ -7,8 +7,7 @@ import { Status } from "https://deno.land/std/http/http_status.ts";
 import { verify } from "https://deno.land/x/djwt/mod.ts";
 import { type Payload } from "https://deno.land/x/djwt/mod.ts";
 
-const OWNER_DIAL_PLAN = "./dial-plan-owner.json";
-const MEMBER_DIAL_PLAN = "./dial-plan-member.json";
+const DIAL_PLAN = "./dial-plan.json";
 
 // ----------------------------------------------------------------------------
 function methodNotAllowed(): Response {
@@ -74,19 +73,9 @@ async function verifyToken(token: string): Promise<Payload> {
 }
 
 // ----------------------------------------------------------------------------
-async function getOwnerDialPlan(): Promise<Response> {
+async function getDialPlan(): Promise<Response> {
   try {
-    const json = await Deno.readTextFile(OWNER_DIAL_PLAN);
-    return ok(json);
-  } catch {
-    return emptyList();
-  }
-}
-
-// ----------------------------------------------------------------------------
-async function getMemberDialPlan(): Promise<Response> {
-  try {
-    const json = await Deno.readTextFile(MEMBER_DIAL_PLAN);
+    const json = await Deno.readTextFile(DIAL_PLAN);
     return ok(json);
   } catch {
     return emptyList();
@@ -107,12 +96,12 @@ async function getDialPlan(qs: URLSearchParams): Promise<Response> {
   }
 
   try {
-    if (jwt.context.user.affiliation === "owner") return getOwnerDialPlan();
+    if (jwt.context.user.affiliation === "owner") return getDialPlan();
   } catch {
     // no affiliation field in token
   }
 
-  return await getMemberDialPlan();
+  return emptyList();
 }
 
 // ----------------------------------------------------------------------------
