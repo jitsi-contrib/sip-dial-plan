@@ -34,7 +34,7 @@ git clone https://github.com/jitsi-contrib/sip-dial-plan.git
 
 #### configuration
 
-Update the following files according your environment:
+Update the following files according to your environment:
 
 - [config.ts](./config.ts)
 - [dial-plan.json](./dial-plan.json)
