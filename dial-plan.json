@@ -1,11 +1,16 @@
 [
   {
-    "id": "1001@172.17.17.34",
+    "id": "1000@sip.mydomain.corp",
+    "name": "1000",
+    "type": "videosipgw"
+  },
+  {
+    "id": "1001@sip.mydomain.corp",
     "name": "1001",
     "type": "videosipgw"
   },
   {
-    "id": "1002@172.17.17.34",
+    "id": "1002@sip.mydomain.corp",
     "name": "1002",
     "type": "videosipgw"
   }
