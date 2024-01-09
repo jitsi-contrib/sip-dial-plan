@@ -2,31 +2,31 @@
 // sip-dial-plan.ts
 // ----------------------------------------------------------------------------
 import { HOSTNAME, PORT, TOKEN_ALGORITHM, TOKEN_SECRET } from "./config.ts";
-import { serve } from "https://deno.land/std@0.210.0/http/server.ts";
-import { Status } from "https://deno.land/std@0.210.0/http/http_status.ts";
+import { serve } from "https://deno.land/std@0.211.0/http/server.ts";
+import { STATUS_CODE } from "https://deno.land/std@0.211.0/http/status.ts";
 import { verify } from "https://deno.land/x/djwt@v3.0.1/mod.ts";
-import { type Payload } from "https://deno.land/x/djwt/mod.ts";
+import { type Payload } from "https://deno.land/x/djwt@v3.0.1/mod.ts";
 
 const DIAL_PLAN = "./dial-plan.json";
 
 // ----------------------------------------------------------------------------
 function methodNotAllowed(): Response {
   return new Response("Method Not Allowed", {
-    status: Status.MethodNotAllowed,
+    status: STATUS_CODE.MethodNotAllowed,
   });
 }
 
 // ----------------------------------------------------------------------------
 function notFound(): Response {
   return new Response("Not Found", {
-    status: Status.NotFound,
+    status: STATUS_CODE.NotFound,
   });
 }
 
 // ----------------------------------------------------------------------------
 function emptyList(): Response {
   return new Response("[]", {
-    status: Status.OK,
+    status: STATUS_CODE.OK,
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
@@ -36,7 +36,7 @@ function emptyList(): Response {
 // ----------------------------------------------------------------------------
 function ok(body: string): Response {
   return new Response(body, {
-    status: Status.OK,
+    status: STATUS_CODE.OK,
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
