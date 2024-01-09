@@ -2,9 +2,9 @@
 // sip-dial-plan.ts
 // ----------------------------------------------------------------------------
 import { HOSTNAME, PORT, TOKEN_ALGORITHM, TOKEN_SECRET } from "./config.ts";
-import { serve } from "https://deno.land/std/http/server.ts";
-import { Status } from "https://deno.land/std/http/http_status.ts";
-import { verify } from "https://deno.land/x/djwt/mod.ts";
+import { serve } from "https://deno.land/std@0.210.0/http/server.ts";
+import { Status } from "https://deno.land/std@0.210.0/http/http_status.ts";
+import { verify } from "https://deno.land/x/djwt@v3.0.1/mod.ts";
 import { type Payload } from "https://deno.land/x/djwt/mod.ts";
 
 const DIAL_PLAN = "./dial-plan.json";
