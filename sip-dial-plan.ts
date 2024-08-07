@@ -84,8 +84,11 @@ async function readDialPlan(): Promise<Response> {
 }
 
 // ----------------------------------------------------------------------------
-async function getDialPlan(qs: URLSearchParams): Promise<Response> {
-  const token = qs.get("jwt");
+async function getDialPlan(req: Request): Promise<Response> {
+  const authHeader = req.headers.get("authorization");
+  if (!authHeader) return emptyList();
+
+  const token = authHeader.replace("Bearer ", "");
   if (!token) return emptyList();
 
   let jwt: Payload;
@@ -123,12 +126,11 @@ async function getDialPlan(qs: URLSearchParams): Promise<Response> {
 async function handler(req: Request): Promise<Response> {
   const url = new URL(req.url);
   const path = url.pathname;
-  const qs = new URLSearchParams(url.search);
 
   if (req.method !== "GET" && req.method !== "HEAD") return methodNotAllowed();
   if (path !== "/get-dial-plan") return notFound();
 
-  return await getDialPlan(qs);
+  return await getDialPlan(req);
 }
 
 // ----------------------------------------------------------------------------
