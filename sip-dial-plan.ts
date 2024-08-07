@@ -2,8 +2,7 @@
 // sip-dial-plan.ts
 // ----------------------------------------------------------------------------
 import { HOSTNAME, PORT, TOKEN_ALGORITHM, TOKEN_SECRET } from "./config.ts";
-import { serve } from "https://deno.land/std@0.211.0/http/server.ts";
-import { STATUS_CODE } from "https://deno.land/std@0.211.0/http/status.ts";
+import { STATUS_CODE } from "https://deno.land/std@0.224.0/http/status.ts";
 import { verify } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 import { type Payload } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 
@@ -134,10 +133,10 @@ async function handler(req: Request): Promise<Response> {
 
 // ----------------------------------------------------------------------------
 function main() {
-  serve(handler, {
+  Deno.serve({
     hostname: HOSTNAME,
     port: PORT,
-  });
+  }, handler);
 }
 
 // ----------------------------------------------------------------------------
