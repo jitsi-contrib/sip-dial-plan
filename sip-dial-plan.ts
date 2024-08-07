@@ -4,8 +4,8 @@
 import { HOSTNAME, PORT, TOKEN_ALGORITHM, TOKEN_SECRET } from "./config.ts";
 import { serve } from "https://deno.land/std@0.211.0/http/server.ts";
 import { STATUS_CODE } from "https://deno.land/std@0.211.0/http/status.ts";
-import { verify } from "https://deno.land/x/djwt@v3.0.1/mod.ts";
-import { type Payload } from "https://deno.land/x/djwt@v3.0.1/mod.ts";
+import { verify } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
+import { type Payload } from "https://deno.land/x/djwt@v3.0.2/mod.ts";
 
 const DIAL_PLAN = "./dial-plan.json";
 
@@ -64,6 +64,8 @@ async function getCryptoKey(secret: string, hash: string): Promise<CryptoKey> {
 // ----------------------------------------------------------------------------
 async function verifyToken(token: string): Promise<Payload> {
   let hash = "SHA-256";
+
+  // @ts-expect-error TS2367
   if (TOKEN_ALGORITHM === "HS512") hash = "SHA-512";
 
   const cryptoKey = await getCryptoKey(TOKEN_SECRET, hash);
@@ -96,6 +98,7 @@ async function getDialPlan(qs: URLSearchParams): Promise<Response> {
   }
 
   try {
+    // @ts-expect-error TS18046
     if (jwt.context.user.affiliation === "owner") return readDialPlan();
   } catch {
     // no affiliation field in token
@@ -103,7 +106,9 @@ async function getDialPlan(qs: URLSearchParams): Promise<Response> {
 
   try {
     if (
+      // @ts-expect-error TS18046
       jwt.context.user.moderator === "true" ||
+      // @ts-expect-error TS18046
       jwt.context.user.moderator === true
     ) {
       return readDialPlan();
